@@ -7,8 +7,6 @@ const ProfilePage = () => {
     lastName: "",
     gender: "",
     country: "",
-    language: "",
-    timeZone: "",
     email: "sharmisharmila879@gmail.com",
     mobile: "9876543210",
   });
@@ -23,11 +21,23 @@ const ProfilePage = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      console.log("File selected:", file); // Debugging log
       const reader = new FileReader();
       reader.onload = () => {
         setProfileImage(reader.result);
       };
       reader.readAsDataURL(file);
+    } else {
+      console.log("No file selected");
+    }
+  };
+
+  const handleImageClick = () => {
+    const fileInput = document.getElementById("fileInput");
+    if (fileInput) {
+      fileInput.click();
+    } else {
+      console.error("File input not found");
     }
   };
 
@@ -42,31 +52,38 @@ const ProfilePage = () => {
           {isEditing ? "Save" : "Edit"}
         </button>
       </div>
-      <div className="flex items-center mb-6">
+      <div className="flex items-center mb-6 relative">
         <img
           src={profileImage}
           alt="Profile"
-          className="w-16 h-16 rounded-full mr-4"
+          className="w-20 h-20 rounded-full mr-4"
         />
         {isEditing && (
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="ml-4"
-          />
+          <>
+            <div className="w-[20px] h-[20px] rounded-full left-14 bottom-0 font-extrabold absolute bg-black text-white hover:bg-gray-800 flex items-center justify-center">
+              <button onClick={handleImageClick}>+</button>
+            </div>
+
+            <input
+              type="file"
+              id="fileInput"
+              accept="image/*"
+              onChange={handleImageChange}
+              //onChange={handleImageClick}
+              className="hidden"
+            />
+          </>
         )}
+
         <div>
           <p className="text-lg font-medium text-black">sharmila</p>
-          <p className="text-sm text-red-700">{profile.email}</p>
+          <p className="text-sm text-gray-700">{profile.email}</p>
         </div>
       </div>
       <form>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-black font-medium">
-              First Name
-            </label>
+            <label className="block text-black font-medium">First Name</label>
             <input
               type="text"
               name="firstName"
@@ -97,8 +114,7 @@ const ProfilePage = () => {
           </div>
           <div>
             <label className="block text-black font-medium">Gender</label>
-            <input
-              type="text"
+            <select
               name="gender"
               value={profile.gender}
               onChange={handleChange}
@@ -108,7 +124,13 @@ const ProfilePage = () => {
                   ? "bg-white border-gray-400"
                   : "bg-gray-200 border-transparent"
               }`}
-            />
+            >
+              <option value="" disabled>
+                Select Gender
+              </option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
           </div>
           <div>
             <label className="block text-black font-medium">Country</label>
@@ -125,25 +147,10 @@ const ProfilePage = () => {
               }`}
             />
           </div>
-          <div>
-            <label className="block text-black font-medium">Language</label>
-            <input
-              type="text"
-              name="language"
-              value={profile.language}
-              onChange={handleChange}
-              disabled={!isEditing}
-              className={`mt-1 w-full px-3 py-1.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-black ${
-                isEditing
-                  ? "bg-white border-gray-400"
-                  : "bg-gray-200 border-transparent"
-              }`}
-            />
-          </div>
         </div>
         <div className="mt-6">
           <label className="block text-black font-medium">
-            My Email Address
+            Email Address
           </label>
           <input
             type="email"
@@ -154,9 +161,7 @@ const ProfilePage = () => {
           />
         </div>
         <div className="mt-6">
-          <label className="block text-black font-medium">
-            Mobile Number
-          </label>
+          <label className="block text-black font-medium">Mobile Number</label>
           <input
             type="tel"
             name="mobile"
