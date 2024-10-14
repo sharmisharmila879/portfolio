@@ -58,7 +58,7 @@ const ProfilePage = () => {
         )}
         <div>
           <p className="text-lg font-medium text-black">sharmila</p>
-          <p className="text-sm text-gray-700">{profile.email}</p>
+          <p className="text-sm text-red-700">{profile.email}</p>
         </div>
       </div>
       <form>
